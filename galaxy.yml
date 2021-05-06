@@ -1,0 +1,14 @@
+namespace: "thola"
+name: "thola-ansible"
+version: "1.0.0"
+readme: "README.md"
+authors:
+  - "Thola team [team@thola.io]"
+license:
+  - "BSD-2-Clause"
+license_file: "LICENSE"
+homepage: "https://thola.io"
+tags:
+  - collection
+repository: "https://github.com/inexio/thola-ansible"
+description: "Integrates the functionalities of Thola into Ansible"

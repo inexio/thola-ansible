@@ -1,0 +1,3 @@
+collections:
+  - name: https://github.com/inexio/thola-client-module-python
+    type: git
