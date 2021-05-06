@@ -16,7 +16,7 @@ Currently the following modules are available:
 - ``thola_check_snmp_facts``
 - ``thola_check_thola_server_facts``
 - ``thola_check_ups_facts``
-- ``thola_check_identify_facts``
+- ``thola_identify_facts``
 
 # Dependencies:
 - ``thola-client``
