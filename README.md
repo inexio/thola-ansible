@@ -8,7 +8,7 @@ Currently the following modules are available:
 - ``thola_check_cpu_load_facts``
 - ``thola_check_disk_facts``
 - ``thola_check_hardware_health_facts``
-- ``thola_check_identify``
+- ``thola_check_identify_facts``
 - ``thola_check_interface_metrics_facts``
 - ``thola_check_memory_usage_facts``
 - ``thola_check_sbc_facts``
