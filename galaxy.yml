@@ -1,5 +1,5 @@
 namespace: "thola"
-name: "thola-ansible"
+name: "thola"
 version: "1.0.0"
 readme: "README.md"
 authors:
