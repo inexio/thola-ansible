@@ -54,7 +54,7 @@ $ ansible-playbook identify_playbook.yml
 PLAY [thola identify] *********
 
 TASK [thola identify facts] ****************************
-ok: [exampledevice1] => {
+ok: [device1] => {
     "thola_identify_facts": {
         "_class": "{{ _class }}",
         "properties": {
