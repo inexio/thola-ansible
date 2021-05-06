@@ -23,3 +23,49 @@ Currently the following modules are available:
 
 # Install thola-client
 ``pip install git+https://github.com/inexio/thola-client-module-python``
+
+# Example
+### Inventory file:
+```INI
+[devices]
+device1 api_host = 'http://device1.domain.com:8237'
+```
+### Playbook file:
+```YAML
+- name: thola identify
+  hosts: device1
+  gather_facts: False
+  tasks:
+    - name: thola identify facts
+      thola.thola.thola_identify_facts:
+        host: '192.168.178.1'
+        community: 'exampleCommunity'
+        version: '2c'
+        port: 161
+        discover_parallel_request: 5
+        discover_retries: 0
+        discover_timeout: 2
+```
+
+### Playbook Output:
+```INI
+$ ansible-playbook identify_playbook.yml
+
+PLAY [thola identify] *********
+
+TASK [thola identify facts] ****************************
+ok: [exampledevice1] => {
+    "thola_identify_facts": {
+        "_class": "{{ _class }}",
+        "properties": {
+            "model": "{{ model }}",
+            "model_series": "{{ model_series }}",
+            "os_version": "{{ os_version }}",
+            "serial_number": "{{ serial_number }}",
+            "vendor": "{{ vendor }}"}}
+    }
+    "changed": False
+}
+
+device1 : ok=1 changed=0 unreachable=0 failed=0 skipped=0 rescued=0 ignored=0
+```
