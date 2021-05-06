@@ -28,7 +28,7 @@ Currently the following modules are available:
 ### Inventory file:
 ```INI
 [devices]
-device1 api_host = 'http://device1.domain.com:8237'
+device1 host = '192.168.178.1'
 ```
 ### Playbook file:
 ```YAML
@@ -38,7 +38,7 @@ device1 api_host = 'http://device1.domain.com:8237'
   tasks:
     - name: thola identify facts
       thola.thola.thola_identify_facts:
-        host: '192.168.178.1'
+        api_host: 'http://device1.domain.com:8237'
         community: 'exampleCommunity'
         version: '2c'
         port: 161
