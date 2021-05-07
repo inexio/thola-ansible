@@ -69,3 +69,9 @@ ok: [device1] => {
 
 device1 : ok=1 changed=0 unreachable=0 failed=0 skipped=0 rescued=0 ignored=0
 ```
+
+### Run the modules
+
+To run the thola modules there has to be a running Thola API somewhere
+where you can connect to. The hostname of the running API server must be
+stored in ansible_host. You can set this variable in the playbook.
