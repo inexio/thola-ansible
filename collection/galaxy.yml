@@ -12,3 +12,5 @@ tags:
   - collection
 repository: "https://github.com/inexio/thola-ansible"
 description: "Integrates the functionalities of Thola into Ansible"
+build_ignore:
+  - "*.tar.gz"
