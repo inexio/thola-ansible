@@ -167,6 +167,8 @@ def main():
         module.fail_json("Repsonse couldn't be parsed")
         return
 
+    result_dict["netsystem"] = result_dict["_class"]
+    del result_dict["_class"]
     properties = result_dict["properties"]
     del result_dict["properties"]
     updated_properties = change_property_names(properties)
