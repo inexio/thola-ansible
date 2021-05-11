@@ -76,6 +76,19 @@ try:
 except ImportError:
     pass
 
+def change_property_names(properties):
+    properties["net_model"] = properties["model"]
+    del properties["model"]
+    properties["net_version"] = properties["os_version"]
+    del properties["os_version"]
+    properties["net_serialnum"] = properties["serial_number"]
+    del properties["serial_number"]
+    properties["net_vendor"] = properties["vendor"]
+    del properties["vendor"]
+    properties["net_model_series"] = properties["model_series"]
+    del properties["model_series"]
+    return properties
+
 
 def main():
     module = AnsibleModule(
@@ -154,6 +167,10 @@ def main():
         module.fail_json("Repsonse couldn't be parsed")
         return
 
+    properties = result_dict["properties"]
+    del result_dict["properties"]
+    updated_properties = change_property_names(properties)
+    result_dict.update(updated_properties)
     results = {"changed": False, "ansible_facts": result_dict}
     module.exit_json(**results)
 

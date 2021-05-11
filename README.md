@@ -28,7 +28,7 @@ Currently the following modules are available:
 ### Inventory file:
 ```INI
 [devices]
-device1 host = '192.168.178.1'
+device1 ansible_host = '192.168.178.1'
 ```
 ### Playbook file:
 ```YAML
@@ -37,8 +37,8 @@ device1 host = '192.168.178.1'
   gather_facts: False
   tasks:
     - name: thola identify facts
-      thola.thola.thola_identify_facts:
-        api_host: 'http://device1.domain.com:8237'
+      inexio.thola.thola_identify_facts:
+        api_host: 'http://api.domain.com:8237'
         community: 'exampleCommunity'
         version: '2c'
         port: 161
