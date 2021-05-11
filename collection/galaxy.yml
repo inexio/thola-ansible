@@ -4,8 +4,6 @@ version: "1.0.0"
 readme: "README.md"
 authors:
   - "Thola team [team@thola.io]"
-license:
-  - "BSD-2-Clause"
 license_file: "LICENSE"
 homepage: "https://thola.io"
 tags:

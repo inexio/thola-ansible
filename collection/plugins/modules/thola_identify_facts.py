@@ -76,6 +76,7 @@ try:
 except ImportError:
     pass
 
+
 def change_property_names(properties):
     properties["net_model"] = properties["model"]
     del properties["model"]
