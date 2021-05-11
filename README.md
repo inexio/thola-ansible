@@ -42,7 +42,7 @@ device1 ansible_host="192.168.178.1" snmp_community="public" snmp_version="2c" s
   tasks:
     - name: Gather facts (thola)
       inexio.thola.thola_identify_facts:
-        ansible_host: "{{ ansible_host }}"
+        host: "{{ ansible_host }}"
         api_host: 'http://localhost:8237'
         community: "{{ snmp_community }}"          # Default: "public"
         version: "{{ snmp_version }}"              # Default: "2c"
