@@ -125,31 +125,31 @@ def main():
             return
 
     if module.params["version"] is None:
-        version = None
+        version = "2c"
     else:
         version = module.params["version"]
     if module.params["community"] is None:
-        community = None
+        community = "public"
     else:
         community = module.params["community"]
     if module.params["port"] is None:
-        port = None
+        port = "161"
     else:
         port = module.params["port"]
     if module.params["discover_parallel_request"] is None:
-        discover_parallel_request = None
+        discover_parallel_request = 5
     else:
         discover_parallel_request = module.params["discover_parallel_request"]
     if module.params["discover_retries"] is None:
-        discover_retries = None
+        discover_retries = 0
     else:
         discover_retries = module.params["discover_retries"]
     if module.params["discover_timeout"] is None:
-        discover_timeout = None
+        discover_timeout = 2
     else:
         discover_timeout = module.params["discover_timeout"]
 
-    # thresholds
+    # memory thresholds
     if module.params["critical_max"] is None:
         critical_max = None
     else:
