@@ -32,42 +32,48 @@ If you don't know how to install/run it have a look at [this section](https://gi
 ### Inventory file:
 ```INI
 [devices]
-device1 ansible_host='192.168.178.1'
+device1 ansible_host="192.168.178.1" snmp_community="public" snmp_version="2c" snmp_port=161
 ```
 ### Playbook file:
 ```YAML
-- name: thola identify
-  hosts: device1
-  gather_facts: False
+- name: "thola identify facts"
+  hosts: devices
+  gather_facts: no
   tasks:
-    - name: thola identify facts
+    - name: Gather facts (thola)
       inexio.thola.thola_identify_facts:
-        api_host: 'http://api.domain.com:8237'
-        community: 'exampleCommunity'
-        version: '2c'
-        port: 161
-        discover_parallel_request: 5
-        discover_retries: 0
-        discover_timeout: 2
+        ansible_host: "{{ ansible_host }}"
+        api_host: 'http://localhost:8237'
+        community: "{{ snmp_community }}"          # Default: "public"
+        version: "{{ snmp_version }}"              # Default: "2c"
+        port: "{{ snmp_port }}"                    # Default:  161
+
+    - name: Print gathered facts
+      debug:
+        var: ansible_facts
 ```
 
 ### Playbook Output:
 ```INI
 $ ansible-playbook identify_playbook.yml
 
-PLAY [thola identify] *********
+PLAY [thola identify facts] ****************************
 
-TASK [thola identify facts] ****************************
+                                                 
+TASK [Gather facts (thola)] ****************************
+
+                                               
+TASK [Print gathered facts] ****************************
+                                                       
 ok: [device1] => {
-    "thola_identify_facts": {
-        "netsystem": "{{ netsystem }}",
-        "net_model": "{{ net_model }}",
-        "net_model_series": "{{ net_model_series }}",
-        "net_version": "{{ net_version }}",
-        "net_serial_number": "{{ net_serial_number }}",
-        "net_vendor": "{{ net_vendor }}"}}
+    "ansible_facts": {
+        "net_model": "VMX",
+        "net_model_series": null,
+        "net_serialnum": "V21FA5ZG2FG9",
+        "net_vendor": "Juniper",
+        "net_version": null,
+        "netsystem": "junos"
     }
-    "changed": False
 }
 
 device1 : ok=1 changed=0 unreachable=0 failed=0 skipped=0 rescued=0 ignored=0
@@ -77,7 +83,7 @@ device1 : ok=1 changed=0 unreachable=0 failed=0 skipped=0 rescued=0 ignored=0
 
 To run the thola modules there has to be a running Thola API somewhere
 where you can connect to. The hostname of the running API server must be
-stored in ansible_host. You can set this variable in the playbook.
+stored in api_host. You can set this variable in the playbook.
 
 ### How to use the Thola API
 
@@ -94,3 +100,4 @@ To start a Thola API, simply execute:
 
     ./thola api
 
+More information about Thola and how to use it can be found in our [documentation](https://docs.thola.io/).

@@ -17,7 +17,7 @@ options:
         description:
           - Hostname of the running Thola API instance
         required: True
-    ansible_host:
+    host:
         description:
           - IP of the device you want to identify
         required: True
@@ -68,7 +68,7 @@ options:
 EXAMPLES = """
 - name: thola check server
   thola_check_server_facts:
-    ansible_host: '{{ ansible_host }}'
+    host: '{{ host }}'
     community: '{{ community }}'
     version: '{{ version }}'
     port: '{{ port }}'
@@ -116,7 +116,7 @@ def main():
     module = AnsibleModule(
         argument_spec=dict(
             api_host=dict(type="str", required=True),
-            ansible_host=dict(type="str", required=True),
+            host=dict(type="str", required=True),
             community=dict(type="str", required=False),
             version=dict(type="str", required=False),
             port=dict(type="int", required=False),
@@ -138,10 +138,10 @@ def main():
     if not thola_client_found:
         module.fail_json("The thola-client-module is not installed")
 
-    ansible_host = module.params["ansible_host"]
+    host = module.params["host"]
     api_host = module.params["api_host"]
 
-    argument_check = {"ansible_host": ansible_host, "api_host": api_host}
+    argument_check = {"host": host, "api_host": api_host}
     for key, val in argument_check.items():
         if val is None:
             module.fail_json(msg=str(key) + " is required")
@@ -220,7 +220,7 @@ def main():
             warning_min=procs_warning_min
         ),
         device_data=thola_client.DeviceData(
-            ip_address=ansible_host,
+            ip_address=host,
             connection_data=thola_client.ConnectionData(
                 snmp=thola_client.SNMPConnectionData(
                     communities=[community],
