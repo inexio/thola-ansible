@@ -23,7 +23,7 @@ Currently the following modules are available:
 
 # Requirements
 To be able to execute the module properly, you have to run a thola API.
-If you don't know how to install/run it have a look at [this section](#How to use the Thola API)
+If you don't know how to install/run it have a look at [this section](https://github.com/inexio/thola-ansible#how-to-use-the-thola-api)
 
 # Install thola-client
 ``pip install git+https://github.com/inexio/thola-client-module-python``
