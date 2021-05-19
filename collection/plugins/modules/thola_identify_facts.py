@@ -69,6 +69,7 @@ thola_identify_facts:
     type: dict
 """
 
+
 def change_quotation_marks(obj):
     if isinstance(obj, dict):
         for key, value in obj.items():
@@ -79,6 +80,7 @@ def change_quotation_marks(obj):
     else:
         pass
     return obj
+
 
 thola_client_found = False
 try:
@@ -193,14 +195,9 @@ def main():
     updated_properties = change_property_names(properties)
     result_dict.update(updated_properties)
 
-    if result_dict["status_code"] == 0:
-        result_dict = change_quotation_marks(result_dict)
-        results = {"changed": False, "ansible_facts": result_dict}
-        module.exit_json(**results)
-    else:
-        result_dict = change_quotation_marks(result_dict)
-        results = {"changed": False, "ansible_facts": result_dict["raw_output"]}
-        module.fail_json(results)
+    result_dict = change_quotation_marks(result_dict)
+    results = {"changed": False, "ansible_facts": result_dict}
+    module.exit_json(**results)
 
 
 if __name__ == "__main__":

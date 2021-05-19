@@ -149,6 +149,7 @@ thola_check_ups_facts:
     type: dict
 """
 
+
 def change_quotation_marks(obj):
     if isinstance(obj, dict):
         for key, value in obj.items():
@@ -159,6 +160,7 @@ def change_quotation_marks(obj):
     else:
         pass
     return obj
+
 
 thola_client_found = False
 try:

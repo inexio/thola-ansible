@@ -1,6 +1,6 @@
 namespace: "inexio"
 name: "thola"
-version: "1.0.3"
+version: "1.0.4"
 readme: "README.md"
 authors:
   - "Thola team [team@thola.io]"
