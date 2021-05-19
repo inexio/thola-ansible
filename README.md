@@ -1,34 +1,44 @@
-# thola-ansible
+# Thola-ansible
 
-Collection of ansible modules that uses Thola to retrieve data about network devices.
+This is a [collection](https://galaxy.ansible.com/inexio/thola) of ansible modules that uses Thola to retrieve data about network devices.
+Thola is an open-source tool for monitoring network devices written in Go.
 
-# Modules:
+If you are interested in Thola have a look at our [website](https://thola.io/) and
+the [repository](https://github.com/inexio/thola).
+
+## Modules
 Currently the following modules are available:
 
-- ``thola_check_cpu_load_facts``
-- ``thola_check_disk_facts``
-- ``thola_check_hardware_health_facts``
-- ``thola_check_identify_facts``
-- ``thola_check_interface_metrics_facts``
-- ``thola_check_memory_usage_facts``
-- ``thola_check_sbc_facts``
-- ``thola_check_server_facts``
-- ``thola_check_snmp_facts``
-- ``thola_check_thola_server_facts``
-- ``thola_check_ups_facts``
-- ``thola_identify_facts``
+Module                                   | Description
+-----------------------------------------|---------------------------------------------------------
+``thola_check_cpu_load_facts``           | Checks the CPU load of a device
+``thola_check_disk_facts``               | Checks the disk usage of a device
+``thola_check_hardware_health_facts``    | Checks the hardware health of a device
+``thola_check_identify_facts``           | Checks if identify matches some expectations
+``thola_check_interface_metrics_facts``  | Checks the interfaces of a device
+``thola_check_memory_usage_facts``       | Checks the memory usage of a device
+``thola_check_sbc_facts``                | Checks an SBC device
+``thola_check_server_facts``             | Checks a linux server
+``thola_check_snmp_facts``               | Checks SNMP availibility
+``thola_check_ups_facts``                | Checks whether a UPS device has its main voltage applied
+``thola_identify_facts``                 | Identifies properties of a device
 
-# Dependencies:
-- ``thola-client``
-
-# Requirements
+## Requirements
 To be able to execute the module properly, you have to run a thola API.
-If you don't know how to install/run it have a look at [this section](https://github.com/inexio/thola-ansible#how-to-use-the-thola-api)
+If you don't know how to install / run it have a look at [this section](https://github.com/inexio/thola-ansible#how-to-run-a-thola-api)
 
-# Install thola-client
-``pip install git+https://github.com/inexio/thola-client-module-python``
+You also need to have the thola-client python module installed on your system.
+This can be done by the following command:
 
-# Example
+    pip install thola-client
+
+## How to run a Thola API
+
+If you want to know how to install Thola have a look at [this page](https://docs.thola.io/getting-started/installing-the-binaries/).
+
+If you don't know how to start a Thola API have a look at our [this page](https://docs.thola.io/getting-started/api-mode/)
+
+## Example
 ### Inventory file:
 ```INI
 [devices]
@@ -72,32 +82,9 @@ ok: [device1] => {
         "net_serialnum": "V21FA5ZG2FG9",
         "net_vendor": "Juniper",
         "net_version": null,
-        "netsystem": "junos"
+        "net_system": "junos"
     }
 }
 
 device1 : ok=1 changed=0 unreachable=0 failed=0 skipped=0 rescued=0 ignored=0
 ```
-
-### Run the modules
-
-To run the thola modules there has to be a running Thola API somewhere
-where you can connect to. The hostname of the running API server must be
-stored in api_host. You can set this variable in the playbook.
-
-### How to use the Thola API
-
-You can download the latest compiled thola version from its [repository](https://github.com/inexio/thola)
-for your platform under the "Releases" tab or build it yourself:
-
-    git clone https://github.com/inexio/thola.git
-    cd thola
-    go build
-
-**Note: This requires Go 1.16 or newer**
-
-To start a Thola API, simply execute:
-
-    ./thola api
-
-More information about Thola and how to use it can be found in our [documentation](https://docs.thola.io/).

@@ -1,5 +1,7 @@
 import json
+import sys
 
+import urllib3
 from ansible.module_utils.basic import AnsibleModule
 
 DOCUMENTATION = """
@@ -83,9 +85,21 @@ thola_check_sbc_facts:
     type: dict
 """
 
+def change_quotation_marks(obj):
+    if isinstance(obj, dict):
+        for key, value in obj.items():
+            if isinstance(value, dict):
+                change_quotation_marks(value)
+            elif isinstance(value, str):
+                obj[key] = obj[key].replace("\"", "'")
+    else:
+        pass
+    return obj
+
 thola_client_found = False
 try:
     import thola_client.api.check_api as check
+    import thola_client.rest as rest
     import thola_client
 
     thola_client_found = True
@@ -94,6 +108,7 @@ except ImportError:
 
 
 def main():
+    sys.stderr = None
     module = AnsibleModule(
         argument_spec=dict(
             api_host=dict(type="str", required=True),
@@ -133,7 +148,7 @@ def main():
     else:
         community = module.params["community"]
     if module.params["port"] is None:
-        port = "161"
+        port = 161
     else:
         port = module.params["port"]
     if module.params["discover_parallel_request"] is None:
@@ -191,15 +206,23 @@ def main():
 
     check_api = check.CheckApi()
     check_api.api_client.configuration.host = api_host
-    result = check_api.check_sbc(body=body).__str__().replace("\'", "\"").replace("None", "null")
     try:
-        result_dict = json.loads(result)
-    except json.JSONDecodeError:
-        module.fail_json("Repsonse couldn't be parsed")
+        result_dict = check_api.check_sbc(body=body).to_dict()
+    except rest.ApiException as e:
+        module.fail_json(**json.loads(e.body))
+        return
+    except urllib3.exceptions.MaxRetryError:
+        module.fail_json("Can't connect to Thola API!")
         return
 
-    results = {"changed": False, "ansible_facts": result_dict}
-    module.exit_json(**results)
+    if result_dict["status_code"] == 0:
+        result_dict = change_quotation_marks(result_dict)
+        results = {"changed": False, "ansible_facts": result_dict}
+        module.exit_json(**results)
+    else:
+        result_dict = change_quotation_marks(result_dict)
+        results = {"changed": False, "ansible_facts": result_dict["raw_output"]}
+        module.fail_json(results)
 
 
 if __name__ == "__main__":

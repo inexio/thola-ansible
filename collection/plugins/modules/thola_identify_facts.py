@@ -1,5 +1,7 @@
 import json
+import sys
 
+import urllib3
 from ansible.module_utils.basic import AnsibleModule
 
 DOCUMENTATION = """
@@ -67,9 +69,21 @@ thola_identify_facts:
     type: dict
 """
 
+def change_quotation_marks(obj):
+    if isinstance(obj, dict):
+        for key, value in obj.items():
+            if isinstance(value, dict):
+                change_quotation_marks(value)
+            elif isinstance(value, str):
+                obj[key] = obj[key].replace("\"", "'")
+    else:
+        pass
+    return obj
+
 thola_client_found = False
 try:
     import thola_client.api.identify_api as identify
+    import thola_client.rest as rest
     import thola_client
 
     thola_client_found = True
@@ -78,20 +92,21 @@ except ImportError:
 
 
 def change_property_names(properties):
-    properties["net_model"] = properties["model"]
+    properties["ansible_net_model"] = properties["model"]
     del properties["model"]
-    properties["net_version"] = properties["os_version"]
+    properties["ansible_net_version"] = properties["os_version"]
     del properties["os_version"]
-    properties["net_serialnum"] = properties["serial_number"]
+    properties["ansible_net_serialnum"] = properties["serial_number"]
     del properties["serial_number"]
-    properties["net_vendor"] = properties["vendor"]
+    properties["ansible_net_vendor"] = properties["vendor"]
     del properties["vendor"]
-    properties["net_model_series"] = properties["model_series"]
+    properties["ansible_net_model_series"] = properties["model_series"]
     del properties["model_series"]
     return properties
 
 
 def main():
+    sys.stderr = None
     module = AnsibleModule(
         argument_spec=dict(
             api_host=dict(type="str", required=True),
@@ -127,7 +142,7 @@ def main():
     else:
         community = module.params["community"]
     if module.params["port"] is None:
-        port = "161"
+        port = 161
     else:
         port = module.params["port"]
     if module.params["discover_parallel_request"] is None:
@@ -161,21 +176,31 @@ def main():
 
     identify_api = identify.IdentifyApi()
     identify_api.api_client.configuration.host = api_host
-    result = identify_api.identify(body=body).__str__().replace("\'", "\"").replace("None", "null")
     try:
-        result_dict = json.loads(result)
-    except json.JSONDecodeError:
-        module.fail_json("Repsonse couldn't be parsed")
+        result_dict = identify_api.identify(body=body).to_dict()
+    except rest.ApiException as e:
+        module.fail_json(**json.loads(e.body))
+        return
+    except urllib3.exceptions.MaxRetryError:
+        module.fail_json("Can't connect to Thola API!")
         return
 
-    result_dict["netsystem"] = result_dict["_class"]
+    result_dict["ansible_net_system"] = result_dict["_class"]
+    result_dict["ansible_net_os"] = result_dict["_class"]
     del result_dict["_class"]
     properties = result_dict["properties"]
     del result_dict["properties"]
     updated_properties = change_property_names(properties)
     result_dict.update(updated_properties)
-    results = {"changed": False, "ansible_facts": result_dict}
-    module.exit_json(**results)
+
+    if result_dict["status_code"] == 0:
+        result_dict = change_quotation_marks(result_dict)
+        results = {"changed": False, "ansible_facts": result_dict}
+        module.exit_json(**results)
+    else:
+        result_dict = change_quotation_marks(result_dict)
+        results = {"changed": False, "ansible_facts": result_dict["raw_output"]}
+        module.fail_json(results)
 
 
 if __name__ == "__main__":
