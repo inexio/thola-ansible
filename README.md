@@ -9,47 +9,41 @@ the [repository](https://github.com/inexio/thola).
 ## Modules
 Modules are separated in read, check and identify. Currently the following modules are available:
 
-<details>
-    <summary>Read Modules</summary>
+### Read Modules
 
-    Module                                   | Description
-    -----------------------------------------|---------------------------------------------------------
-    ``thola_check_cpu_load_facts``           | Checks the CPU load of a device
-    ``thola_check_disk_facts``               | Checks the disk usage of a device
-    ``thola_check_hardware_health_facts``    | Checks the hardware health of a device
-    ``thola_check_identify_facts``           | Checks if identify matches some expectations
-    ``thola_check_interface_metrics_facts``  | Checks the interfaces of a device
-    ``thola_check_memory_usage_facts``       | Checks the memory usage of a device
-    ``thola_check_sbc_facts``                | Checks an SBC device
-    ``thola_check_server_facts``             | Checks a linux server
-    ``thola_check_snmp_facts``               | Checks SNMP availibility
-    ``thola_check_ups_facts``                | Checks whether a UPS device has its main voltage applied
-</details>
+Module                                   | Description
+-----------------------------------------|---------------------------------------------------------
+``thola_check_cpu_load_facts``           | Checks the CPU load of a device
+``thola_check_disk_facts``               | Checks the disk usage of a device
+``thola_check_hardware_health_facts``    | Checks the hardware health of a device
+``thola_check_identify_facts``           | Checks if identify matches some expectations
+``thola_check_interface_metrics_facts``  | Checks the interfaces of a device
+``thola_check_memory_usage_facts``       | Checks the memory usage of a device
+``thola_check_sbc_facts``                | Checks an SBC device
+``thola_check_server_facts``             | Checks a linux server
+``thola_check_snmp_facts``               | Checks SNMP availibility
+``thola_check_ups_facts``                | Checks whether a UPS device has its main voltage applied
 
-<details>
-    <summary>Check Modules</summary>
+### Check Modules
 
-    Module                                    | Description
-    ------------------------------------------|---------------------------------------------------------
-    ``thola_read_available_components_facts`` | Reads the available components for the device
-    ``thola_read_count_interfaces_facts``     | Counts the interfaces of a device
-    ``thola_read_cpu_load_facts``             | Reads the CPU load of a device
-    ``thola_read_disk_facts``                 | Reads the disk of a device
-    ``thola_read_hardware_health_facts``      | Reads the hardware health of a device
-    ``thola_read_interfaces_facts``           | Reads the interfaces of a device
-    ``thola_read_memory_usage_facts``         | Reads the memory usage of a device
-    ``thola_read_sbc_facts``                  | Reads values of an sbc device
-    ``thola_read_server_facts``               | Reads the server values of a device
-    ``thola_read_ups_facts``                  | Reads values of a ups device
-</details>
+Module                                    | Description
+------------------------------------------|---------------------------------------------------------
+``thola_read_available_components_facts`` | Reads the available components for the device
+``thola_read_count_interfaces_facts``     | Counts the interfaces of a device
+``thola_read_cpu_load_facts``             | Reads the CPU load of a device
+``thola_read_disk_facts``                 | Reads the disk of a device
+``thola_read_hardware_health_facts``      | Reads the hardware health of a device
+``thola_read_interfaces_facts``           | Reads the interfaces of a device
+``thola_read_memory_usage_facts``         | Reads the memory usage of a device
+``thola_read_sbc_facts``                  | Reads values of an sbc device
+``thola_read_server_facts``               | Reads the server values of a device
+``thola_read_ups_facts``                  | Reads values of a ups device
 
-<details>
-    <summary>Identify Module</summary>
+### Identify Module
 
-    Module                   | Description
-    -------------------------|---------------------------------------------------------
-    ``thola_identify_facts`` | Identifies properties of a device
-</details>
+Module                   | Description
+-------------------------|---------------------------------------------------------
+``thola_identify_facts`` | Identifies properties of a device
 
 ## Requirements
 To be able to execute the module properly, you have to run a thola API.
