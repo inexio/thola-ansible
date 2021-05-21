@@ -6,12 +6,12 @@ from ansible.module_utils.basic import AnsibleModule
 
 DOCUMENTATION = """
 ---
-module: thola_check_interface_metrics_facts
+module: thola_read_interfaces_facts
 author: "Thola team"
-version_added: "1.0.0"
-short_description: "Checks the interface metrics for a given device"
+version_added: "1.0.4"
+short_description: "Read out interfaces of a given device"
 description:
-    - "Checks the interface metrics for a given device with SNMP"
+    - "Read out the interfaces of a given device with SNMP"
 requirements:
     - thola-client-module-python
 options:
@@ -41,17 +41,11 @@ options:
     discover_timeout:
         description:
           - Sets the discover timeout
-    ifName_filter:
-        description:
-          - Filters all interfaces out where ifName matches the regex
-    ifType_filter:
-        description:
-          - Filters all interfaces out where ifType matches the regex
 """
 
 EXAMPLES = """
-- name: thola check interface metrics
-  thola_check_interface_metrics_facts:
+- name: thola read interfaces
+  thola_read_interfaces_facts:
     api_host: '{{ api_host }}'
     host: '{{ host }}'
     community: '{{ community }}'
@@ -60,8 +54,6 @@ EXAMPLES = """
     discover_parallel_request: '{{ discover_parallel_request }}'
     discover_retries: '{{ discover_retries }}'
     discover_timeout: '{{ discover_timeout }}'
-    ifName_filter: '{{ ifName_filter }}'
-    ifType_filter: '{{ ifType_filter }}'
   register: result
 """
 
@@ -71,7 +63,7 @@ changed:
     returned: always
     type: bool
     sample: True
-thola_check_interface_metrics_facts:
+thola_read_interfaces_facts:
     description: "Interface metrics facts"
     returned: always
     type: dict
@@ -92,7 +84,7 @@ def change_quotation_marks(obj):
 
 thola_client_found = False
 try:
-    import thola_client.api.check_api as check
+    import thola_client.api.read_api as read
     import thola_client.rest as rest
     import thola_client
 
@@ -112,9 +104,7 @@ def main():
             port=dict(type="int", required=False),
             discover_parallel_request=dict(type="int", required=False),
             discover_retries=dict(type="int", required=False),
-            discover_timeout=dict(type="int", required=False),
-            ifName_filter=dict(type="str", required=False),
-            ifType_filter=dict(type="str", required=False)
+            discover_timeout=dict(type="int", required=False)
         ),
         supports_check_mode=True,
     )
@@ -156,17 +146,7 @@ def main():
     else:
         discover_timeout = module.params["discover_timeout"]
 
-    # ifname filter
-    if module.params["ifName_filter"] is None:
-        if_name_filter = None
-    else:
-        if_name_filter = module.params["ifName_filter"]
-    if module.params["ifType_filter"] is None:
-        if_type_filter = None
-    else:
-        if_type_filter = module.params["ifName_filter"]
-
-    body = thola_client.CheckInterfaceMetricsRequest(
+    body = thola_client.ReadInterfacesRequest(
         device_data=thola_client.DeviceData(
             ip_address=host,
             connection_data=thola_client.ConnectionData(
@@ -179,15 +159,13 @@ def main():
                     discover_parallel_requests=discover_parallel_request
                 )
             )
-        ),
-        if_name_filter=if_name_filter,
-        if_type_filter=if_type_filter
+        )
     )
 
-    check_api = check.CheckApi()
-    check_api.api_client.configuration.host = api_host
+    read_api = read.ReadApi()
+    read_api.api_client.configuration.host = api_host
     try:
-        result_dict = check_api.check_interface_metrics(body=body).to_dict()
+        result_dict = read_api.read_interfaces(body=body).to_dict()
     except rest.ApiException as e:
         module.fail_json(**json.loads(e.body))
         return
@@ -195,14 +173,9 @@ def main():
         module.fail_json("Can't connect to Thola API!")
         return
 
-    if result_dict["status_code"] == 0:
-        result_dict = change_quotation_marks(result_dict)
-        results = {"changed": False, "ansible_facts": result_dict}
-        module.exit_json(**results)
-    else:
-        result_dict = change_quotation_marks(result_dict)
-        results = {"changed": False, "ansible_facts": result_dict["raw_output"]}
-        module.fail_json(results)
+    result_dict = change_quotation_marks(result_dict)
+    results = {"changed": False, "ansible_facts": result_dict}
+    module.exit_json(**results)
 
 
 if __name__ == "__main__":
