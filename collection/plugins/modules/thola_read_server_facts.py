@@ -6,12 +6,12 @@ from ansible.module_utils.basic import AnsibleModule
 
 DOCUMENTATION = """
 ---
-module: thola_read_interfaces_facts
+module: thola_read_sbc_facts
 author: "Thola team"
 version_added: "1.0.5"
-short_description: "Reads interfaces of a given device"
+short_description: "Reads a server"
 description:
-    - "Reads the interfaces of a given device with SNMP"
+    - "Reads a server (e.g. procs, users)"
 requirements:
     - thola-client-module-python
 options:
@@ -44,8 +44,8 @@ options:
 """
 
 EXAMPLES = """
-- name: thola read interfaces
-  thola_read_interfaces_facts:
+- name: thola read server
+  thola_read_server_facts:
     api_host: '{{ api_host }}'
     host: '{{ host }}'
     community: '{{ community }}'
@@ -63,8 +63,8 @@ changed:
     returned: always
     type: bool
     sample: True
-thola_read_interfaces_facts:
-    description: "Interfaces facts"
+thola_read_server_facts:
+    description: "Server facts"
     returned: always
     type: dict
 """
@@ -146,7 +146,7 @@ def main():
     else:
         discover_timeout = module.params["discover_timeout"]
 
-    body = thola_client.ReadInterfacesRequest(
+    body = thola_client.ReadServerRequest(
         device_data=thola_client.DeviceData(
             ip_address=host,
             connection_data=thola_client.ConnectionData(
@@ -165,7 +165,7 @@ def main():
     read_api = read.ReadApi()
     read_api.api_client.configuration.host = api_host
     try:
-        result_dict = read_api.read_interfaces(body=body).to_dict()
+        result_dict = read_api.read_server(body=body).to_dict()
     except rest.ApiException as e:
         module.fail_json(**json.loads(e.body))
         return
