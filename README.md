@@ -9,7 +9,7 @@ the [repository](https://github.com/inexio/thola).
 ## Modules
 Modules are separated in read, check and identify. Currently the following modules are available:
 
-<detail>
+<details>
     <summary>Read Modules</summary>
 
     Module                                   | Description
@@ -24,9 +24,9 @@ Modules are separated in read, check and identify. Currently the following modul
     ``thola_check_server_facts``             | Checks a linux server
     ``thola_check_snmp_facts``               | Checks SNMP availibility
     ``thola_check_ups_facts``                | Checks whether a UPS device has its main voltage applied
-</detail>
+</details>
 
-<detail>
+<details>
     <summary>Check Modules</summary>
 
     Module                                    | Description
@@ -41,15 +41,15 @@ Modules are separated in read, check and identify. Currently the following modul
     ``thola_read_sbc_facts``                  | Reads values of an sbc device
     ``thola_read_server_facts``               | Reads the server values of a device
     ``thola_read_ups_facts``                  | Reads values of a ups device
-</detail>
+</details>
 
-<detail>
+<details>
     <summary>Identify Module</summary>
 
     Module                   | Description
     -------------------------|---------------------------------------------------------
     ``thola_identify_facts`` | Identifies properties of a device
-</detail>
+</details>
 
 ## Requirements
 To be able to execute the module properly, you have to run a thola API.
