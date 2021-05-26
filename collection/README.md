@@ -9,7 +9,7 @@ the [repository](https://github.com/inexio/thola).
 ## Modules
 Modules are separated in read, check and identify. Currently the following modules are available:
 
-### Read Modules
+### Check Modules
 
 Module                                   | Description
 -----------------------------------------|---------------------------------------------------------
@@ -24,7 +24,7 @@ Module                                   | Description
 ``thola_check_snmp_facts``               | Checks SNMP availibility
 ``thola_check_ups_facts``                | Checks whether a UPS device has its main voltage applied
 
-### Check Modules
+### Read Modules
 
 Module                                    | Description
 ------------------------------------------|---------------------------------------------------------
