@@ -130,7 +130,7 @@ The following example shows how to add basic property information (e.g. os, vers
         version: "{{ snmp_version }}"
         port: "{{ snmp_port }}"
 
-    - name: Add gathered data
+    - name: Add gathered identify data
       networktocode.nautobot.device:
         url: "{{ lookup('env', 'NAUTOBOT_URL') }}"
         token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
@@ -167,7 +167,7 @@ If you want to automatically add interface information of your devices to Nautob
         version: "{{ snmp_version }}"
         port: "{{ snmp_port }}"
         
-    - name: "add gathered interfaces data"
+    - name: Add gathered interfaces data
       connection: local
       vars:
         ansible_python_interpreter: /opt/ansible/bin/python3
