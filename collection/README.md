@@ -111,23 +111,23 @@ device1 : ok=1 changed=0 unreachable=0 failed=0 skipped=0 rescued=0 ignored=0
 
 ## Nautobot Integration
 
-Thola's Ansible module can be used to inventory your network devices into an existing Nautobot instance.
-The following example shows how to add basic property information (e.g. os, version) to a device in Nautobot.
+Thola's Ansible module can be used to inventory your network devices into an existing [Nautobot](https://github.com/nautobot/nautobot) instance.
+The following example shows how to add basic property information (e.g. os, version) to a device in Nautobot. We use the [Nautobot Ansible](https://github.com/nautobot/nautobot-ansible/) collection for this.
 
 ```YAML
 - name: "thola add to nautobot"
   hosts: devices
   gather_facts: no
   tasks:
-    - name: Gather facts (thola)
+    - name: Gather identify facts (thola)
       inexio.thola.thola_identify_facts:
         host: "{{ ansible_host }}"
         api_host: 'http://localhost:8237'
         community: "{{ snmp_community }}"
         version: "{{ snmp_version }}"
         port: "{{ snmp_port }}"
-        
-    - name: Add gathered data
+
+    - name: Add gathered identify data
       networktocode.nautobot.device:
         url: "{{ lookup('env', 'NAUTOBOT_URL') }}"
         token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
@@ -142,4 +142,42 @@ The following example shows how to add basic property information (e.g. os, vers
           status: active
         state: present
         validate_certs: False
+```
+
+If you want to automatically add interface information of your devices to Nautobot, Thola in combination with Nautobot's `device_interface` module can help you.
+
+```YAML
+- name: "thola add interfaces to nautobot"
+  hosts: devices
+  gather_facts: no
+  tasks:
+    - name: Gather interface facts (thola)
+      inexio.thola.thola_read_interfaces_facts:
+        host: "{{ ansible_host }}"
+        api_host: 'http://localhost:8237'
+        community: "{{ snmp_community }}"
+        version: "{{ snmp_version }}"
+        port: "{{ snmp_port }}"
+        
+    - name: Add gathered interfaces data
+      connection: local
+      vars:
+        ansible_python_interpreter: /opt/ansible/bin/python3
+      networktocode.nautobot.device_interface:
+        url: "{{ lookup('env', 'NAUTOBOT_URL') }}"
+        token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
+        data:
+          device: "{{ inventory_hostname }}"
+          name: "{{ data['if_name'] }}"
+          description: "{{ data['if_descr'] }}"
+          mtu: "{{ '1' if ((data['if_mtu'] < 1) or (data['if_mtu'] >= 65536)) else data['if_mtu'] }}"
+          type: "Virtual"
+          enabled: "{% if data['if_admin_status'] == 'up' %} true {% else %} false {% endif %}"
+          mac_address: "{{ data['if_phys_address'] }}"
+        state: present
+        validate_certs: False
+      loop: "{{ ansible_facts['interfaces'] }}"
+      loop_control:
+        loop_var: data
+        label: "{{ data['if_name'] }}"
 ```
