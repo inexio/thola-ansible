@@ -165,7 +165,7 @@ def main():
     read_api = read.ReadApi()
     read_api.api_client.configuration.host = api_host
     try:
-        result_dict = read_api.read_hardware_health(body=body).to_dict()
+        result_dict = read_api.hardware_health(body=body).to_dict()
     except rest.ApiException as e:
         module.fail_json(**json.loads(e.body))
         return
